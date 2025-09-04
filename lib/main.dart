@@ -38,7 +38,7 @@ class MindMesh extends StatelessWidget {
           title: AppStrings.mindMesh,
           theme: model.lightTheme,
           // darkTheme: model.darkTheme,
-          // themeMode: theme.appThemeMode,
+          themeMode: theme.appThemeMode,
           home: const SplashView(),
         );
       }
