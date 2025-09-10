@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:mindmesh/ui/common/styles.dart';
 
 class AppTheme {
   ThemeData lightTheme = ThemeData.light(useMaterial3: true).copyWith(
     brightness: Brightness.light,
     colorScheme: const ColorScheme.light(),
-    scaffoldBackgroundColor: Colors.grey.shade100,
-    cardColor: Colors.white,
-    // hintColor: Colors.red,
-    textTheme: TextTheme(),
-    iconTheme: const IconThemeData(color: Colors.black),
+    scaffoldBackgroundColor: kCGrey100Color,
+    cardColor: kCWhiteColor,
+    textTheme: TextTheme(
+      titleLarge: kTSplashText.copyWith(color: kCBlackColor),
+      displayMedium: kTButtonText.copyWith(color: kCBlackColor),
+      displayLarge: kTTitleText.copyWith(color: kCBlackColor),
+      displaySmall: kTSmallText,
+      titleMedium: kTBigGreyText,
+        titleSmall: kTMediumText.copyWith(color: kCBlackColor)
+    ),
+    iconTheme: const IconThemeData(color: kCBlackColor),
   );
 
   ThemeData darkTheme = ThemeData.dark(useMaterial3: true).copyWith(
     brightness: Brightness.dark,
     colorScheme: const ColorScheme.dark(),
-    scaffoldBackgroundColor: Colors.black87,
-    cardColor: Colors.black87,
-    // hintColor: Colors.white,
-    textTheme: TextTheme(),
-    iconTheme: const IconThemeData(color: Colors.white),
-  );
+    scaffoldBackgroundColor: kCBlack87Color,
+    cardColor: kCBlack87Color,
+    textTheme: TextTheme(
+        titleLarge: kTSplashText.copyWith(color: kCWhiteColor),
+        displayMedium: kTButtonText.copyWith(color: kCWhiteColor),
+      displayLarge: kTTitleText.copyWith(color: kCWhiteColor),
+      displaySmall: kTSmallText,
+      titleMedium: kTBigGreyText,
+      titleSmall: kTMediumText.copyWith(color: kCWhiteColor)
+    ),
+    iconTheme: const IconThemeData(color: kCWhiteColor,
+  ));
 
 }

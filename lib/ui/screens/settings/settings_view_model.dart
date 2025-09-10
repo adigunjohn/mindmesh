@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mindmesh/app/locator.dart';
 import 'package:mindmesh/services/hive_service.dart';
+import 'package:mindmesh/services/navigation_service.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   SettingsViewModel() {
     _initialize();
   }
   final HiveService _hiveService = locator<HiveService>();
+  final NavigationService _navigate = locator<NavigationService>();
+
   AppThemeMode currentTheme = AppThemeMode.automatic;
   ThemeMode? appThemeMode;
 
@@ -59,6 +62,10 @@ class SettingsViewModel extends ChangeNotifier {
     }
     _hiveService.updateThemeMode(theme: themeMode);
     _setTheme(themeMode);
+  }
+
+  void pop(){
+    _navigate.pop();
   }
 }
 
