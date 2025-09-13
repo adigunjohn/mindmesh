@@ -12,6 +12,8 @@ class CircleButton extends StatelessWidget {
     this.containerColor,
     this.borderColor,
     this.iconSize,
+    this.image,
+    this.useImage = false,
   });
   final void Function()? onTap;
   final Widget? child;
@@ -20,6 +22,8 @@ class CircleButton extends StatelessWidget {
   final Color? containerColor;
   final Color? borderColor;
   final double? iconSize;
+  final String? image;
+  final bool useImage;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -29,12 +33,13 @@ class CircleButton extends StatelessWidget {
         width: 50,
         decoration: BoxDecoration(
           color: containerColor ?? Colors.transparent,
+          image: useImage == true ? DecorationImage(image: AssetImage(image.toString()), fit: BoxFit.cover) : null,
           shape: BoxShape.circle,
           border: Border.all(width: 1, color: borderColor ?? kCGrey400Color),
         ),
         child: Center(
           child:
-              child ??
+          useImage == true ? null : child ??
               Icon(icon, color: iconColor ?? Theme.of(context).iconTheme.color, size: iconSize ?? IconSize.circleButtonIconSize,),
         ),
       ),

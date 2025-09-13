@@ -6,8 +6,11 @@ class HomeViewModel extends ChangeNotifier{
   HomeViewModel();
   final NavigationService _navigate = locator<NavigationService>();
 
-  void navigate(String routeName){
+  void navigateNamed(String routeName){
     _navigate.pushNamed(routeName);
+  }
+  void navigate(Widget routeWidget){
+    _navigate.push(routeWidget);
   }
 
 }

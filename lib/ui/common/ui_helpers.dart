@@ -7,6 +7,7 @@ class IconSize{
   static const double splashIconSize = 250;
   static const double circleButtonIconSize = 27;
   static const double homeConIconSize = 25;
+  static const double chatBubbleIconSize = 22;
 }
 
 

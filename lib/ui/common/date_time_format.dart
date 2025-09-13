@@ -1,5 +1,10 @@
 import 'package:intl/intl.dart';
 
+String formatTime() {
+  final dateTime = DateTime.now().toLocal();
+  final timeFormat = DateFormat("h:mm a");
+  return timeFormat.format(dateTime);
+}
 
 String formatDateTime(String input) {
   final dateTime = DateTime.parse(input).toLocal(); // Convert to local time

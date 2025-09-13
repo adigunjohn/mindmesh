@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mindmesh/enums/ai.dart';
 import 'package:mindmesh/ui/common/strings.dart';
 import 'package:mindmesh/ui/common/styles.dart';
 import 'package:mindmesh/ui/common/ui_helpers.dart';
 import 'package:mindmesh/ui/custom_widgets/circle_button.dart';
 import 'package:mindmesh/ui/custom_widgets/home_con.dart';
+import 'package:mindmesh/ui/custom_widgets/home_tiles.dart';
+import 'package:mindmesh/ui/screens/chat/chat_view.dart';
 import 'package:mindmesh/ui/screens/home/home_view_model.dart';
+import 'package:mindmesh/ui/screens/mesh_chat/mesh_chat_view.dart';
 import 'package:mindmesh/ui/screens/settings/settings_view.dart';
 import 'package:provider/provider.dart';
 
@@ -24,8 +28,8 @@ class HomeView extends StatelessWidget {
               width: screenWidth(context),
               child: Padding(
                 padding: const EdgeInsets.only(
-                  bottom: 8,
-                  top: 30,
+                  // bottom: 0,
+                  top: 15,
                   left: 15,
                   right: 15,
                 ),
@@ -35,16 +39,32 @@ class HomeView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CircleButton(icon: Icons.person, onTap: null),
-                        CircleButton(
-                          icon: Icons.menu_open_outlined,
-                          onTap: () {
-                            model.navigate(SettingsView.id);
-                          },
+                        Row(
+                          children: [
+                            Text(
+                              AppStrings.mindMesh,
+                              style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(width: 5,),
+                            Icon(Icons.eco_rounded, size: 25, color: kCGreenColor,)
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CircleButton(onTap: null, image: AppStrings.dp1, useImage: true,),
+                            SizedBox(width: 5,),
+                            CircleButton(
+                              icon: Icons.menu_open_outlined,
+                              onTap: () {
+                                model.navigateNamed(SettingsView.id);
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 8),
                     Text(
                       AppStrings.hi,
                       style: Theme.of(context).textTheme.titleMedium,
@@ -53,6 +73,7 @@ class HomeView extends StatelessWidget {
                     SizedBox(height: 8),
                     Text(
                       AppStrings.greetings,
+                      maxLines: 2,
                       style: Theme.of(context).textTheme.displayLarge,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -60,34 +81,45 @@ class HomeView extends StatelessWidget {
                     Row(
                       children: [
                         HomeCon(
-                          onTap: (){},
+                          onTap: () {
+                            model.navigateNamed(MeshChatView.id);
+                          },
                           maxLines: 5,
-                          color: kCGreenColor,
+                          color: kCCustomTeal,
                           icon: CupertinoIcons.chat_bubble_2,
-                          height: screenHeight(context)/2.8,
-                          width: screenWidth(context)/2.3,
+                          height: screenHeight(context) / 2.8,
+                          width: screenWidth(context) / 2.3,
                           text: AppStrings.engageMultipleAIs,
                         ),
                         Spacer(),
                         Column(
                           children: [
                             HomeCon(
-                              onTap: (){},
+                              onTap: () {
+                                model.navigate(ChatView(whichAI: AI.gemini));
+                              },
                               maxLines: 2,
-                              color: kCPurpleColor,
+                              color: kCCustomLightBlue,
                               icon: CupertinoIcons.sparkles,
-                              height: screenHeight(context)/6,
-                              width: screenWidth(context)/2.3,
+                              height: screenHeight(context) / 6,
+                              width: screenWidth(context) / 2.3,
                               text: AppStrings.converseWithGeminiAI,
                             ),
-                            SizedBox(height: (screenHeight(context)/2.8 - (screenHeight(context)/6 + screenHeight(context)/6)),),
+                            SizedBox(
+                              height:
+                                  (screenHeight(context) / 2.8 -
+                                      (screenHeight(context) / 6 +
+                                          screenHeight(context) / 6)),
+                            ),
                             HomeCon(
-                              onTap: (){},
+                              onTap: () {
+                                model.navigate(ChatView(whichAI: AI.chatGPT));
+                              },
                               maxLines: 2,
-                              color: kCPinkColor,
+                              color: kCCustomIndigo,
                               icon: Icons.ac_unit_outlined,
-                              height: screenHeight(context)/6,
-                              width: screenWidth(context)/2.3,
+                              height: screenHeight(context) / 6,
+                              width: screenWidth(context) / 2.3,
                               text: AppStrings.converseWithChatGPTAI,
                             ),
                           ],
@@ -100,7 +132,47 @@ class HomeView extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 15,),
+                    SizedBox(height: 8),
+                    Expanded(
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          HomeTiles(
+                            onTap: () {
+                              model.navigate(ChatView(whichAI: AI.chatGPT));
+                            },
+                            title: AppStrings.chatGPTAI,
+                            subTitle: AppStrings.chatGPTSub,
+                            image: AppStrings.openAI,
+                          ),
+                          HomeTiles(
+                            onTap: () {
+                              model.navigate(ChatView(whichAI: AI.gemini));
+                            },
+                            title: AppStrings.geminiAI,
+                            subTitle: AppStrings.geminiSub,
+                            image: AppStrings.gemini,
+                          ),
+                          HomeTiles(
+                            onTap: () {
+                              model.navigate(ChatView(whichAI: AI.claude));
+                            },
+                            title: AppStrings.claudeAI,
+                            subTitle: AppStrings.claudeSub,
+                            image: AppStrings.claude,
+                          ),
+                          HomeTiles(
+                            onTap: () {
+                              model.navigate(ChatView(whichAI: AI.deepseek));
+                            },
+                            title: AppStrings.deepseekAI,
+                            subTitle: AppStrings.deepseekSub,
+                            image: AppStrings.deepseek,
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

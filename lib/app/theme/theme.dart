@@ -7,13 +7,15 @@ class AppTheme {
     colorScheme: const ColorScheme.light(),
     scaffoldBackgroundColor: kCGrey100Color,
     cardColor: kCWhiteColor,
+    hintColor: kCGrey200Color,
     textTheme: TextTheme(
       titleLarge: kTSplashText.copyWith(color: kCBlackColor),
       displayMedium: kTButtonText.copyWith(color: kCBlackColor),
       displayLarge: kTTitleText.copyWith(color: kCBlackColor),
       displaySmall: kTSmallText,
       titleMedium: kTBigGreyText,
-        titleSmall: kTMediumText.copyWith(color: kCBlackColor)
+        titleSmall: kTMediumText.copyWith(color: kCBlackColor),
+      bodyMedium: kTMessageText.copyWith(color: kCBlackColor),
     ),
     iconTheme: const IconThemeData(color: kCBlackColor),
   );
@@ -23,13 +25,15 @@ class AppTheme {
     colorScheme: const ColorScheme.dark(),
     scaffoldBackgroundColor: kCBlack87Color,
     cardColor: kCBlack87Color,
+    hintColor: kCNavyGreen,
     textTheme: TextTheme(
         titleLarge: kTSplashText.copyWith(color: kCWhiteColor),
         displayMedium: kTButtonText.copyWith(color: kCWhiteColor),
       displayLarge: kTTitleText.copyWith(color: kCWhiteColor),
       displaySmall: kTSmallText,
       titleMedium: kTBigGreyText,
-      titleSmall: kTMediumText.copyWith(color: kCWhiteColor)
+      titleSmall: kTMediumText.copyWith(color: kCWhiteColor),
+      bodyMedium: kTMessageText.copyWith(color: kCWhiteColor),
     ),
     iconTheme: const IconThemeData(color: kCWhiteColor,
   ));

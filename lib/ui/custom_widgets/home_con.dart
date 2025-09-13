@@ -15,48 +15,52 @@ class HomeCon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.all(Radius.circular(25),),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  text,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kCWhiteColor, fontWeight: FontWeight.bold),
-                  maxLines: maxLines ?? 4,
-                  overflow: TextOverflow.ellipsis,
+      child: Material(
+        elevation: 5,
+        borderRadius: BorderRadius.all(Radius.circular(25),),
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.all(Radius.circular(25),),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    text,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kCWhiteColor, fontWeight: FontWeight.bold),
+                    maxLines: maxLines ?? 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: kCGrey300Color,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: Center(
-                        child: Icon(icon, color: kCBlackColor, size: IconSize.homeConIconSize,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: kCGrey300Color,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(7.0),
+                        child: Center(
+                          child: Icon(icon, color: kCBlackColor, size: IconSize.homeConIconSize,),
+                        ),
                       ),
                     ),
-                  ),
-                  Transform.rotate(
-                      angle: 30.75,
-                      child: Icon(Icons.arrow_forward_outlined, color: kCWhiteColor, size: IconSize.homeConIconSize,),
-                  ),
-                ],
-              )
-            ],
+                    Transform.rotate(
+                        angle: 30.75,
+                        child: Icon(Icons.arrow_forward_outlined, color: kCWhiteColor, size: IconSize.homeConIconSize,),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mindmesh/ui/common/strings.dart';
 import 'package:mindmesh/ui/common/styles.dart';
 import 'package:mindmesh/ui/common/ui_helpers.dart';
@@ -42,8 +43,7 @@ class OnboardingView extends StatelessWidget {
                           final feed = model.onboardingFeed[index];
                           return Column(
                             children: [
-                              Expanded(child: Icon(Icons.eco_rounded, size: IconSize.splashIconSize, color: kCGreenColor,)),
-                              // Expanded(child: Image.asset(feed.image, fit: BoxFit.cover,),),
+                              Expanded(child: SvgPicture.asset(feed.image, fit: BoxFit.contain, height: screenHeight(context)/2.3, color: Colors.green,)),
                               SizedBox(height: 8),
                               Text(
                                 feed.title,

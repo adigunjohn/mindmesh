@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mindmesh/enums/app_theme.dart';
 import 'package:mindmesh/ui/common/strings.dart';
 import 'package:mindmesh/ui/common/styles.dart';
 import 'package:mindmesh/ui/common/ui_helpers.dart';
@@ -10,7 +11,7 @@ class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
   static const String id = 'SettingsView';
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext settingsContext) {
     return Consumer<SettingsViewModel>(
       builder: (context, model, child) {
         return Scaffold(
@@ -51,8 +52,9 @@ class SettingsView extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: kCGrey400Color,
+                      image: DecorationImage(image: AssetImage(AppStrings.dp1,), fit: BoxFit.cover),
                     ),
-                    child: Icon(Icons.person, color: kCGreenColor,size: 80,),
+                    // child: Image.asset(AppStrings.dp, fit: BoxFit.cover),
                   ),
                   SizedBox(height: 15,),
                   Text(
@@ -74,8 +76,59 @@ class SettingsView extends StatelessWidget {
                   ),
                   SettingsTile(
                     title: AppStrings.theme,
-                    subTitle: AppStrings.systemTheme,
-                    onTap: (){},
+                    subTitle: model.setThemeMessage,
+                    onTap: (){
+                      showModalBottomSheet(context: settingsContext, builder: (settingsContext){
+                            return SizedBox(
+                              height: screenHeight(context)/3.0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppStrings.pickTheme,
+                                        style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      SizedBox(height: 5,),
+                                      Text(
+                                        AppStrings.pickThemeSub,
+                                        style: Theme.of(context).textTheme.displaySmall,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      SizedBox(height: 30,),
+                                      SettingsTile(
+                                        title: AppStrings.systemTheme,
+                                        titleColor: model.currentTheme == AppThemeMode.automatic ? kCGreenColor : null,
+                                        onTap: (){
+                                          model.updateThemeMode(AppThemeMode.automatic);
+                                        },
+                                      ),
+                                      SettingsTile(
+                                        title: AppStrings.lightTheme,
+                                        titleColor: model.currentTheme == AppThemeMode.light ? kCGreenColor : null,
+                                        onTap: (){
+                                          model.updateThemeMode(AppThemeMode.light);
+                                        },
+                                      ),
+                                      SettingsTile(
+                                        showDivider: false,
+                                        title: AppStrings.darkTheme,
+                                        titleColor: model.currentTheme == AppThemeMode.dark ? kCGreenColor : null,
+                                        onTap: (){
+                                          model.updateThemeMode(AppThemeMode.dark);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                      },
+                      );
+                    },
                   ),
                   SettingsTile(
                     title: AppStrings.storage,

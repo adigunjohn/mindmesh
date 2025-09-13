@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mindmesh/ui/common/styles.dart';
 
 class SettingsTile extends StatelessWidget {
-  const SettingsTile({super.key, this.subTitle, this.title, this.onTap, this.color});
+  const SettingsTile({super.key, this.subTitle, this.title, this.onTap, this.color, this.showDivider = true, this.titleColor});
  final String? title;
  final String? subTitle;
  final void Function()? onTap;
  final Color? color;
+ final Color? titleColor;
+ final bool showDivider;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -19,7 +21,7 @@ class SettingsTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   title.toString(),
-                  style: Theme.of(context).textTheme.displayMedium,
+                  style: Theme.of(context).textTheme.displayMedium!.copyWith(color: titleColor ?? Theme.of(context).textTheme.displayMedium!.color),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -40,10 +42,13 @@ class SettingsTile extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Divider(
-              color: kCGrey300Color,
+          Visibility(
+            visible: showDivider,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Divider(
+                color: kCGrey300Color,
+              ),
             ),
           ),
         ],

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mindmesh/app/locator.dart';
+import 'package:mindmesh/enums/app_theme.dart';
 import 'package:mindmesh/services/hive_service.dart';
 import 'package:mindmesh/services/navigation_service.dart';
+import 'package:mindmesh/ui/common/strings.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   SettingsViewModel() {
@@ -12,36 +14,32 @@ class SettingsViewModel extends ChangeNotifier {
 
   AppThemeMode currentTheme = AppThemeMode.automatic;
   ThemeMode? appThemeMode;
-
-  bool isLightTheme = false;
-  bool isDarkTheme = false;
-  bool isAutomaticTheme = true;
+  String? setThemeMessage;
 
   void _initialize() {
     final themeMode = _hiveService.getThemeMode() ?? ThemeMode.system;
     _setTheme(themeMode);
   }
 
+  final List<String> _themeMessage = [
+    AppStrings.systemTheme, AppStrings.lightTheme, AppStrings.darkTheme,
+  ];
+  List<String> get themeMessage => _themeMessage;
+
   void _setTheme(ThemeMode themeMode) {
     appThemeMode = themeMode;
     switch (themeMode) {
       case ThemeMode.light:
         currentTheme = AppThemeMode.light;
-        isLightTheme = true;
-        isDarkTheme = false;
-        isAutomaticTheme = false;
+        setThemeMessage = _themeMessage[1];
         break;
       case ThemeMode.dark:
         currentTheme = AppThemeMode.dark;
-        isLightTheme = false;
-        isDarkTheme = true;
-        isAutomaticTheme = false;
+        setThemeMessage = _themeMessage[2];
         break;
       case ThemeMode.system:
         currentTheme = AppThemeMode.automatic;
-        isLightTheme = false;
-        isDarkTheme = false;
-        isAutomaticTheme = true;
+        setThemeMessage = _themeMessage[0];
         break;
     }
     notifyListeners();
@@ -70,4 +68,4 @@ class SettingsViewModel extends ChangeNotifier {
 }
 
 
-enum AppThemeMode { automatic, light, dark }
+
