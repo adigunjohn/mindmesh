@@ -74,4 +74,8 @@ class AppStrings{
   //MeshChatView
   static const String mesh = 'Multi-AI Mode';
   static const String changeModel = 'View & Change the available models of the AI';
+
+  static const String pickImage = 'Pick Image';
+  static const String takePicture  = 'Take Picture';
+  static const String pickFile = 'Pick Files';
 }

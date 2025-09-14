@@ -15,7 +15,7 @@ class MeshChatViewModel extends ChangeNotifier{
   ScrollController get chatGPTScrollController => _chatGPTScrollController;
   ScrollController get claudeScrollController => _claudeScrollController;
   ScrollController get deepseekScrollController => _deepseekScrollController;
-
+  bool showOptions = false;
   final TextEditingController _textController = TextEditingController();
   TextEditingController get textController => _textController;
   String geminiSelectedModelVersion = 'gemini v-1 mini';
@@ -77,6 +77,10 @@ class MeshChatViewModel extends ChangeNotifier{
 
   void pop() {
     _navigate.pop();
+  }
+  void updateShowOptions(){
+    showOptions =! showOptions;
+    notifyListeners();
   }
 
   void updateGeminiSelectedModelVersion(String value){

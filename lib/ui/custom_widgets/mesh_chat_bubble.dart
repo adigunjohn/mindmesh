@@ -32,7 +32,7 @@ class MeshChatBubble extends StatelessWidget {
           children: [
             SizedBox(
                 width: screenWidth(context)/1.33,
-                child: Text(AppStrings.changeModel, maxLines: 1,style: Theme.of(context).textTheme.displaySmall,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,)),
+                child: Text(AppStrings.changeModel, maxLines: 1,style: Theme.of(context).textTheme.displaySmall,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),),
             PopupMenuButton<String>(
               onSelected: onSelected,
               // initialValue: model.selectedModelVersion,

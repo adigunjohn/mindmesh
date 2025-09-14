@@ -17,6 +17,7 @@ class ChatViewModel extends ChangeNotifier {
   TextEditingController get textController => _textController;
   String chatTitle = 'Chat';
   String? chatImage;
+  bool showOptions = false;
   String? selectedModelVersion;
    String geminiSelectedModelVersion = 'gemini v-1 mini';
    String claudeSelectedModelVersion = 'claude v-1 mini';
@@ -80,6 +81,11 @@ class ChatViewModel extends ChangeNotifier {
 
   void pop() {
     _navigate.pop();
+  }
+
+  void updateShowOptions(){
+    showOptions =! showOptions;
+    notifyListeners();
   }
 
   void updateSelectedModelVersion(AI? ai,String value){
