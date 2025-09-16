@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindmesh/ui/common/strings.dart';
 import 'package:mindmesh/ui/common/styles.dart';
 import 'package:mindmesh/ui/common/ui_helpers.dart';
 
@@ -115,12 +117,28 @@ class ChatBubble extends StatelessWidget {
                         ),),),
                     if(message != null) SizedBox(height: image != null ? 12 : 0,),
                     if(message != null) SizedBox(height: file != null ? 12 : 0,),
-                    if(message != null) Text(
-                      message.toString(),
-                      maxLines: 100,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    // if(message != null) Text(
+                    //   message.toString(),
+                    //   maxLines: 100,
+                    //   overflow: TextOverflow.ellipsis,
+                    //   style: Theme.of(context).textTheme.bodyMedium,
+                    // ),
+                    if (message != null)
+                      MarkdownBody(
+                        data: message.toString(),
+                        selectable: true,
+                        styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                          p: Theme.of(context).textTheme.bodyMedium,
+                          strong: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                          em: Theme.of(context).textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.italic),
+                          code: Theme.of(context).textTheme.bodySmall!.copyWith(
+                               fontFamily: AppStrings.poppins,
+                               backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                               color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          listBullet: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
                   ],
                 ),
               ),

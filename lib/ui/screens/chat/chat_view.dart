@@ -108,6 +108,7 @@ class _ChatViewState extends State<ChatView> {
                       image: model.pickedImage?.path,
                       file: model.pickedFile?.first.name,
                       visible: model.showOptions,
+                      fileVisible: model.showFile,
                       controller: model.textController,
                       onTap:(){model.sendMessage(widget.whichAI);},
                       onDoubleTap: model.updateShowOptions,

@@ -23,37 +23,11 @@ class MeshChatViewModel extends ChangeNotifier{
   ScrollController get claudeScrollController => _claudeScrollController;
   ScrollController get deepseekScrollController => _deepseekScrollController;
   bool showOptions = false;
+  bool showFile = false;
   final TextEditingController _textController = TextEditingController();
   TextEditingController get textController => _textController;
-  String geminiSelectedModelVersion = 'gemini v-1 mini';
-  String claudeSelectedModelVersion = 'claude v-1 mini';
-  String chatGPTSelectedModelVersion = 'openAI v-1 mini';
-  String deepseekSelectedModelVersion = 'deepseek v-1 mini';
   XFile? pickedImage;
   List<PlatformFile>? pickedFile;
-
-  final List<String> _geminiModelVersion =  [
-    'gemini v-1 mini',
-    'gemini v-2 flash',
-    'gemini v2 pro',
-  ];
-  final List<String> _chatGPTModelVersion =  [
-    'openAI v-1 mini',
-    'openAI v-2 flash',
-    'openAI v2 pro',
-  ];  final List<String> _claudeModelVersion =  [
-    'claude v-1 mini',
-    'claude v-2 flash',
-    'claude v2 pro',
-  ];  final List<String> _deepseekModelVersion =  [
-    'deepseek v-1 mini',
-    'deepseek v-2 flash',
-    'deepseek v2 pro',
-  ];
-  List<String> get geminiModelVersion => _geminiModelVersion;
-  List<String> get chatGPTModelVersion => _chatGPTModelVersion;
-  List<String> get claudeModelVersion => _claudeModelVersion;
-  List<String> get deepseekModelVersion => _deepseekModelVersion;
 
   final List<Message> _geminiMessages = [
     Message(
@@ -92,6 +66,7 @@ class MeshChatViewModel extends ChangeNotifier{
     notifyListeners();
   }
   void deleteFile(){
+    showFile = false;
     pickedFile = null;
     pickedImage = null;
     notifyListeners();
@@ -102,6 +77,7 @@ class MeshChatViewModel extends ChangeNotifier{
     if(image != null){
       deleteFile();
       pickedImage = image;
+      showFile = true;
       log(pickedImage!.path);
       notifyListeners();
     }
@@ -115,6 +91,7 @@ class MeshChatViewModel extends ChangeNotifier{
     if(file != null){
       deleteFile();
       pickedFile = file;
+      showFile = true;
       log('File Name: ${pickedFile!.first.name}, File Path: ${pickedFile!.first.path.toString()}');
       notifyListeners();
     }
@@ -123,22 +100,7 @@ class MeshChatViewModel extends ChangeNotifier{
     }
   }
 
-  void updateGeminiSelectedModelVersion(String value){
-    geminiSelectedModelVersion = value;
-    notifyListeners();
-  }
-  void updateDeepseekSelectedModelVersion(String value){
-    deepseekSelectedModelVersion = value;
-    notifyListeners();
-  }
-  void updateClaudeSelectedModelVersion(String value){
-    claudeSelectedModelVersion = value;
-    notifyListeners();
-  }
-  void updateChatGPTSelectedModelVersion(String value){
-    chatGPTSelectedModelVersion = value;
-    notifyListeners();
-  }
+
   void scrollToBottom(ScrollController scrollController) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (scrollController.hasClients) {
@@ -156,12 +118,9 @@ class MeshChatViewModel extends ChangeNotifier{
       _claudeMessages.add(chatMessages);
       _deepseekMessages.add(chatMessages);
       _textController.clear();
+      showFile = false;
       deleteFile();
       notifyListeners();
-      scrollToBottom(_geminiScrollController);
-      scrollToBottom(_chatGPTScrollController);
-      scrollToBottom(_claudeScrollController);
-      scrollToBottom(_deepseekScrollController);
 
       Future.delayed(Duration(seconds: 2), (){
         final reply1 = Message(text: 'Aye Aye John Doe, Gemini at your service! 😍👍', isUser: false,);
@@ -192,3 +151,28 @@ class MeshChatViewModel extends ChangeNotifier{
     super.dispose();
   }
 }
+
+
+//  // Gemini
+//     _fetchGeminiResponse(userChatMessage).then((response) {
+//       _geminiMessages.add(response);
+//       notifyListeners();
+//       scrollToBottom(_geminiScrollController);
+//     }).catchError((error) {
+//       log("Error fetching Gemini response: $error");
+//       _geminiMessages.add(Message(text: "Error from Gemini.", isUser: false));
+//       notifyListeners();
+//       scrollToBottom(_geminiScrollController);
+//     });
+//
+//     // ChatGPT
+//     _fetchChatGPTResponse(userChatMessage).then((response) {
+//       _chatGPTMessages.add(response);
+//       notifyListeners();
+//       scrollToBottom(_chatGPTScrollController);
+//     }).catchError((error) {
+//       log("Error fetching ChatGPT response: $error");
+//       _chatGPTMessages.add(Message(text: "Error from ChatGPT.", isUser: false));
+//       notifyListeners();
+//       scrollToBottom(_chatGPTScrollController);
+//     });

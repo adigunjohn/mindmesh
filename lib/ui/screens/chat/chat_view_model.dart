@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mindmesh/enums/ai.dart';
 import 'package:mindmesh/models/message.dart';
+import 'package:mindmesh/services/ai_service.dart';
 import 'package:mindmesh/services/file_picker_service.dart';
 import 'package:mindmesh/services/navigation_service.dart';
 import 'package:mindmesh/ui/common/strings.dart';
@@ -14,6 +15,7 @@ class ChatViewModel extends ChangeNotifier {
   ChatViewModel();
   final FilePickerService _filePickerService = locator<FilePickerService>();
   final NavigationService _navigate = locator<NavigationService>();
+  final AIService _aiService = locator<AIService>();
 
   final ScrollController _scrollController = ScrollController();
   ScrollController get scrollController => _scrollController;
@@ -22,10 +24,11 @@ class ChatViewModel extends ChangeNotifier {
   String chatTitle = 'Chat';
   String? chatImage;
   bool showOptions = false;
+  bool showFile = false;
   String? selectedModelVersion;
   XFile? pickedImage;
   List<PlatformFile>? pickedFile;
-   String geminiSelectedModelVersion = 'gemini v-1 mini';
+   String geminiSelectedModelVersion = 'gemini-2.5-flash';
    String claudeSelectedModelVersion = 'claude v-1 mini';
    String chatGPTSelectedModelVersion = 'openAI v-1 mini';
    String deepseekSelectedModelVersion = 'deepseek v-1 mini';
@@ -33,9 +36,9 @@ class ChatViewModel extends ChangeNotifier {
   List<String>? modelVersion;
 
   final List<String> _geminiModelVersion =  [
-    'gemini v-1 mini',
-    'gemini v-2 flash',
-    'gemini v2 pro',
+    'gemini-2.5-pro',
+    'gemini-2.5-flash',
+    'gemini-2.5-flash-lite',
   ];
   final List<String> _chatGPTModelVersion =  [
     'openAI v-1 mini',
@@ -90,6 +93,7 @@ class ChatViewModel extends ChangeNotifier {
     notifyListeners();
   }
   void deleteFile(){
+    showFile = false;
     pickedFile = null;
     pickedImage = null;
     notifyListeners();
@@ -100,6 +104,7 @@ class ChatViewModel extends ChangeNotifier {
     if(image != null){
       deleteFile();
       pickedImage = image;
+      showFile = true;
       log(pickedImage!.path);
       notifyListeners();
     }
@@ -113,6 +118,7 @@ class ChatViewModel extends ChangeNotifier {
     if(file != null){
       deleteFile();
       pickedFile = file;
+      showFile = true;
       log('File Name: ${pickedFile!.first.name}, File Path: ${pickedFile!.first.path.toString()}');
       notifyListeners();
     }
@@ -147,25 +153,45 @@ class ChatViewModel extends ChangeNotifier {
     });
   }
 
-  void sendMessage(AI? ai) {
+  Future<void> sendMessage(AI? ai) async{
     final text = _textController.text.isNotEmpty ? _textController.text.trim() : null;
     if (text != null || pickedImage != null || pickedFile != null) {
       if(ai == AI.gemini){
         _geminiMessages.add(Message(text: text, isUser: true, image: pickedImage?.path, file: pickedFile?.first.name));
         _messages = [..._geminiMessages];
+        showFile = false;
         _textController.clear();
-        deleteFile();
         notifyListeners();
-        scrollToBottom();
-        
-        Future.delayed(const Duration(milliseconds: 1000), () {
+          _geminiMessages.add(Message(text: 'Chill my guyy,Gemini dey perform juju👽🤌...', isUser: false, image: null, file: null),);
+          _messages = [..._geminiMessages];
+          notifyListeners();
+        try{
+          String? replyText;
+          if(text != null && (pickedImage == null && pickedFile == null)){
+            replyText = await _aiService.geminiGenerateWithText(prompt: text, modelName: geminiSelectedModelVersion,);
+          }
+          else if(pickedImage != null && pickedFile == null){
+            final convertedImage = await _aiService.convertImageToDataPart(pickedImage);
+            replyText = await _aiService.geminiGenerateWithTextAndImage(prompt: text.toString(), imageBytes: convertedImage!.bytes, imageMimeType: convertedImage.mimeType, modelName: geminiSelectedModelVersion,);
+          }
+          else if(pickedFile != null && pickedImage == null){
+            final convertedFile = await _aiService.convertFileToDataPart(pickedFile!.first);
+            replyText = await _aiService.geminiGenerateFromTextAndMultimedia(prompt: text.toString(), multimediaParts: [convertedFile!], modelName: geminiSelectedModelVersion,);
+          }
+          deleteFile();
+            _geminiMessages.removeLast();
+            _messages = [..._geminiMessages];
+            notifyListeners();
           _geminiMessages.add(
-            Message(text: 'This is an AI response from Gemini.', isUser: false, image: AppStrings.dp, file: null),
+            Message(text: replyText, isUser: false, image: null, file: null),
           );
           _messages = [..._geminiMessages];
           notifyListeners();
           scrollToBottom();
-        });
+        }catch(e){
+          log('Error in calling Gemini API from ChatViewModel: $e');
+        }
+
       }
       else if(ai == AI.claude){
         _claudeMessages.add(Message(text: text, isUser: true, image: pickedImage?.path, file: pickedFile?.first.name));
@@ -173,7 +199,6 @@ class ChatViewModel extends ChangeNotifier {
         _textController.clear();
         deleteFile();
         notifyListeners();
-        scrollToBottom();
 
         Future.delayed(const Duration(milliseconds: 1000), () {
           _claudeMessages.add(
@@ -190,7 +215,6 @@ class ChatViewModel extends ChangeNotifier {
         _textController.clear();
         deleteFile();
         notifyListeners();
-        scrollToBottom();
 
         Future.delayed(const Duration(milliseconds: 1000), () {
           _chatGPTMessages.add(
@@ -207,7 +231,6 @@ class ChatViewModel extends ChangeNotifier {
         _textController.clear();
         deleteFile();
         notifyListeners();
-        scrollToBottom();
 
         Future.delayed(const Duration(milliseconds: 1000), () {
           _deepseekMessages.add(
@@ -261,3 +284,4 @@ class ChatViewModel extends ChangeNotifier {
     super.dispose();
   }
 }
+

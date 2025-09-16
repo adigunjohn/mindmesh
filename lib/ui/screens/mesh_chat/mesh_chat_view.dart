@@ -27,8 +27,6 @@ class MeshChatView extends StatelessWidget {
             child: Scaffold(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               appBar: AppBar(
-                // surfaceTintColor: kCTransparentColor,
-                // backgroundColor: kCTransparentColor,
                 backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
                 surfaceTintColor: Theme.of(context).appBarTheme.surfaceTintColor,
                 elevation: 0,
@@ -72,51 +70,35 @@ class MeshChatView extends StatelessWidget {
                     children: [
                       //gemini tab
                       MeshChatBubble(
-                          popMenuList: model.geminiModelVersion,
-                          selectedModelVersion: model.geminiSelectedModelVersion,
                           scrollController: model.geminiScrollController,
                           itemCount: model.geminiMessages.length,
                         messages: model.geminiMessages,
                         aiImage: AppStrings.gemini,
-                        onSelected: (value){
-                          model.updateGeminiSelectedModelVersion(value);
-                        },),
+                      ),
 
                       //chatGPT tab
                       MeshChatBubble(
-                        popMenuList: model.chatGPTModelVersion,
-                        selectedModelVersion: model.chatGPTSelectedModelVersion,
                         scrollController: model.chatGPTScrollController,
                         itemCount: model.chatGPTMessages.length,
                         messages: model.chatGPTMessages,
                         aiImage: AppStrings.openAI,
-                        onSelected: (value){
-                          model.updateChatGPTSelectedModelVersion(value);
-                        },),
+                      ),
 
                       //claude tab
                       MeshChatBubble(
-                        popMenuList: model.claudeModelVersion,
-                        selectedModelVersion: model.claudeSelectedModelVersion,
                         scrollController: model.claudeScrollController,
                         itemCount: model.claudeMessages.length,
                         messages: model.claudeMessages,
                         aiImage: AppStrings.claude,
-                        onSelected: (value){
-                          model.updateClaudeSelectedModelVersion(value);
-                        },),
+                        ),
 
                       //deepseek tab
                       MeshChatBubble(
-                        popMenuList: model.deepseekModelVersion,
-                        selectedModelVersion: model.deepseekSelectedModelVersion,
                         scrollController: model.deepseekScrollController,
                         itemCount: model.deepseekMessages.length,
                         messages: model.deepseekMessages,
                         aiImage: AppStrings.deepseek,
-                        onSelected: (value){
-                          model.updateDeepseekSelectedModelVersion(value);
-                        },),
+                      ),
                     ],
                   ),
                   Align(
@@ -125,6 +107,7 @@ class MeshChatView extends StatelessWidget {
                       image: model.pickedImage?.path,
                       file: model.pickedFile?.first.name,
                       visible: model.showOptions,
+                      fileVisible: model.showFile,
                       controller: model.textController,
                       onTap: model.sendMessageToAll,
                       onDoubleTap: model.updateShowOptions,

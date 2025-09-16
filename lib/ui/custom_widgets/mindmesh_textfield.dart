@@ -11,6 +11,7 @@ class MindmeshTextfield extends StatelessWidget {
     super.key,
     this.controller,
     this.visible = false,
+    this.fileVisible = false,
     this.onTap,
     this.onDoubleTap,
     this.pickImageFromCamera,
@@ -29,6 +30,7 @@ class MindmeshTextfield extends StatelessWidget {
   final void Function()? onDoubleTap;
   final void Function()? onDeleteFile;
   final bool visible;
+  final bool fileVisible;
   final String? image;
   final String? file;
   @override
@@ -63,59 +65,62 @@ class MindmeshTextfield extends StatelessWidget {
             ),
           ),
           SizedBox(height: 35),
-          if (image != null || file != null) SizedBox(
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-                    child: Container(
-                      padding: EdgeInsets.all(2),
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: 3, color: kCGreenColor),
-                      ),
-                      child:
-                          image != null
-                              ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.file(
-                                  File(image.toString()),
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                              : Center(
-                                child: Text(
-                                  file.toString(),
-                                  maxLines: 3,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.displaySmall!.copyWith(
-                                    color:
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.bodyMedium!.color,
-                                    fontSize: 10
+          if (image != null || file != null) Visibility(
+            visible: fileVisible,
+            child: SizedBox(
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                      child: Container(
+                        padding: EdgeInsets.all(2),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(width: 3, color: kCGreenColor),
+                        ),
+                        child:
+                            image != null
+                                ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.file(
+                                    File(image.toString()),
+                                    fit: BoxFit.cover,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
+                                )
+                                : Center(
+                                  child: Text(
+                                    file.toString(),
+                                    maxLines: 3,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.displaySmall!.copyWith(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color,
+                                      fontSize: 10
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                              ),
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: -10, right: -10,
-                  child: IconButton(
-                    onPressed: onDeleteFile,
-                    icon: Icon(Icons.highlight_remove, color: kCGreenColor,),
+                  Positioned(
+                    top: -10, right: -10,
+                    child: IconButton(
+                      onPressed: onDeleteFile,
+                      icon: Icon(Icons.highlight_remove, color: kCGreenColor,),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           SizedBox(height: 15),
