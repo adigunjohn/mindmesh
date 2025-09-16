@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindmesh/ui/common/styles.dart';
@@ -10,10 +12,14 @@ class ChatBubble extends StatelessWidget {
     this.time,
    required this.message,
     required this.isUser,
+    this.image,
+    this.file,
   });
  final String aiImage;
  final String? time;
- final String message;
+ final String? image;
+ final String? file;
+ final String? message;
  final bool isUser;
   @override
   Widget build(BuildContext context) {
@@ -30,11 +36,32 @@ class ChatBubble extends StatelessWidget {
                 border: Border.all(color: kCGrey300Color, width: 2),
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(25),bottomLeft: Radius.circular(25),bottomRight: Radius.circular(25))
             ),
-            child: Text(
-              message,
-              maxLines: 100,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyMedium,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (image != null) ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                    child: Image.file(File(image.toString()), fit: BoxFit.contain,),),
+                if (file != null) ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Container(
+                      color: kCGreyColor,
+                      height: 50,
+                      child: Center(
+                        child: Text(file.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 12, fontStyle: FontStyle.italic, color: Theme.of(context).textTheme.bodyMedium!.color),
+                        ),),),),
+                if(message != null) SizedBox(height: image != null ? 12 : 0,),
+                if(message != null) SizedBox(height: file != null ? 12 : 0,),
+                if(message != null) Text(
+                  message.toString(),
+                  maxLines: 100,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
             ),
           ),
           SizedBox(height: 4,),
@@ -68,18 +95,40 @@ class ChatBubble extends StatelessWidget {
                     border: Border.all(color: kCGrey300Color, width: 2),
                     borderRadius: BorderRadius.only(topRight: Radius.circular(25),bottomLeft: Radius.circular(25),bottomRight: Radius.circular(25))
                 ),
-                child: Text(
-                  message,
-                  maxLines: 100,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (image != null) ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(image.toString(), fit: BoxFit.contain,)),
+                    if (file != null) ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        color: kCGreyColor,
+                        height: 50,
+                        child: Center(
+                          child: Text(file.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 12, fontStyle: FontStyle.italic, color: Theme.of(context).textTheme.bodyMedium!.color),
+                          ),
+                        ),),),
+                    if(message != null) SizedBox(height: image != null ? 12 : 0,),
+                    if(message != null) SizedBox(height: file != null ? 12 : 0,),
+                    if(message != null) Text(
+                      message.toString(),
+                      maxLines: 100,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 4,),
               Padding(
                 padding: const EdgeInsets.only(right: 12.0),
                 child: Text(
-                  time ?? '5:48 am',
+                  time.toString(),
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 12),
                 ),

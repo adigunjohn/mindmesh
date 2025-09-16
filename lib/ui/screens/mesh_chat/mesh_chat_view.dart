@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mindmesh/ui/common/strings.dart';
 import 'package:mindmesh/ui/common/styles.dart';
 import 'package:mindmesh/ui/common/ui_helpers.dart';
@@ -121,12 +122,20 @@ class MeshChatView extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: MindmeshTextfield(
+                      image: model.pickedImage?.path,
+                      file: model.pickedFile?.first.name,
                       visible: model.showOptions,
                       controller: model.textController,
-                      onTap: () {
-                        model.sendMessageToAll();
-                      },
+                      onTap: model.sendMessageToAll,
                       onDoubleTap: model.updateShowOptions,
+                      pickFiles: model.pickFile,
+                      pickImageFromGallery: (){
+                        model.pickImage(ImageSource.gallery);
+                      },
+                      pickImageFromCamera: (){
+                        model.pickImage(ImageSource.camera);
+                      },
+                      onDeleteFile: model.deleteFile,
                     ),
                   ),
                 ],

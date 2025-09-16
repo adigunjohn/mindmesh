@@ -1,14 +1,18 @@
+import 'dart:developer';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mindmesh/enums/ai.dart';
 import 'package:mindmesh/models/message.dart';
+import 'package:mindmesh/services/file_picker_service.dart';
 import 'package:mindmesh/services/navigation_service.dart';
 import 'package:mindmesh/ui/common/strings.dart';
-
 import '../../../app/locator.dart';
 
 class ChatViewModel extends ChangeNotifier {
-  // ChatViewModel();
-
+  ChatViewModel();
+  final FilePickerService _filePickerService = locator<FilePickerService>();
   final NavigationService _navigate = locator<NavigationService>();
 
   final ScrollController _scrollController = ScrollController();
@@ -19,6 +23,8 @@ class ChatViewModel extends ChangeNotifier {
   String? chatImage;
   bool showOptions = false;
   String? selectedModelVersion;
+  XFile? pickedImage;
+  List<PlatformFile>? pickedFile;
    String geminiSelectedModelVersion = 'gemini v-1 mini';
    String claudeSelectedModelVersion = 'claude v-1 mini';
    String chatGPTSelectedModelVersion = 'openAI v-1 mini';
@@ -74,10 +80,6 @@ class ChatViewModel extends ChangeNotifier {
       isUser: false,
     ),
   ];
-  // List<Message> get geminiMessages => _geminiMessages;
-  // List<Message> get chatGPTMessages => _chatGPTMessages;
-  // List<Message> get claudeMessages => _claudeMessages;
-  // List<Message> get deepseekMessages => _deepseekMessages;
 
   void pop() {
     _navigate.pop();
@@ -86,6 +88,37 @@ class ChatViewModel extends ChangeNotifier {
   void updateShowOptions(){
     showOptions =! showOptions;
     notifyListeners();
+  }
+  void deleteFile(){
+    pickedFile = null;
+    pickedImage = null;
+    notifyListeners();
+  }
+
+  void pickImage(ImageSource source) async{
+    final image = await _filePickerService.pickImage(source: source);
+    if(image != null){
+      deleteFile();
+      pickedImage = image;
+      log(pickedImage!.path);
+      notifyListeners();
+    }
+    else{
+      log('Error: unable to pick image from $source');
+    }
+  }
+
+  void pickFile() async{
+    final file = await _filePickerService.pickFile();
+    if(file != null){
+      deleteFile();
+      pickedFile = file;
+      log('File Name: ${pickedFile!.first.name}, File Path: ${pickedFile!.first.path.toString()}');
+      notifyListeners();
+    }
+    else{
+      log('Error: unable to pick file');
+    }
   }
 
   void updateSelectedModelVersion(AI? ai,String value){
@@ -105,63 +138,84 @@ class ChatViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void scrollToBottom() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(0.0);
+       // _scrollController.animateTo(0.0, duration: Duration(milliseconds: 50), curve: Curves.easeOut);
+      }
+    });
+  }
+
   void sendMessage(AI? ai) {
-    final text = _textController.text.trim();
-    if (text.isNotEmpty) {
+    final text = _textController.text.isNotEmpty ? _textController.text.trim() : null;
+    if (text != null || pickedImage != null || pickedFile != null) {
       if(ai == AI.gemini){
-        _geminiMessages.add(Message(text: text, isUser: true));
+        _geminiMessages.add(Message(text: text, isUser: true, image: pickedImage?.path, file: pickedFile?.first.name));
         _messages = [..._geminiMessages];
         _textController.clear();
+        deleteFile();
         notifyListeners();
-
+        scrollToBottom();
+        
         Future.delayed(const Duration(milliseconds: 1000), () {
           _geminiMessages.add(
-            Message(text: 'This is an AI response from Gemini.', isUser: false),
+            Message(text: 'This is an AI response from Gemini.', isUser: false, image: AppStrings.dp, file: null),
           );
           _messages = [..._geminiMessages];
           notifyListeners();
+          scrollToBottom();
         });
       }
       else if(ai == AI.claude){
-        _claudeMessages.add(Message(text: text, isUser: true));
+        _claudeMessages.add(Message(text: text, isUser: true, image: pickedImage?.path, file: pickedFile?.first.name));
         _messages = [..._claudeMessages];
         _textController.clear();
+        deleteFile();
         notifyListeners();
+        scrollToBottom();
 
         Future.delayed(const Duration(milliseconds: 1000), () {
           _claudeMessages.add(
-            Message(text: 'This is an AI response from claude.', isUser: false),
+            Message(text: 'This is an AI response from claude.', isUser: false, image: null, file: null),
           );
           _messages = [..._claudeMessages];
           notifyListeners();
+          scrollToBottom();
         });
       }
       else if(ai == AI.chatGPT){
-        _chatGPTMessages.add(Message(text: text, isUser: true));
+        _chatGPTMessages.add(Message(text: text, isUser: true, image: pickedImage?.path, file: pickedFile?.first.name));
         _messages = [..._chatGPTMessages];
         _textController.clear();
+        deleteFile();
         notifyListeners();
+        scrollToBottom();
 
         Future.delayed(const Duration(milliseconds: 1000), () {
           _chatGPTMessages.add(
-            Message(text: 'This is an AI response from ChatGPT.', isUser: false),
+            Message(image: AppStrings.dp1,isUser: false, file: null, text: null),
           );
           _messages = [..._chatGPTMessages];
           notifyListeners();
+          scrollToBottom();
         });
       }
       else if(ai == AI.deepseek){
-        _deepseekMessages.add(Message(text: text, isUser: true));
+        _deepseekMessages.add(Message(text: text, isUser: true, image: pickedImage?.path, file: pickedFile?.first.name));
         _messages = [..._deepseekMessages];
         _textController.clear();
+        deleteFile();
         notifyListeners();
+        scrollToBottom();
 
         Future.delayed(const Duration(milliseconds: 1000), () {
           _deepseekMessages.add(
-            Message(text: 'This is an AI response from Deepseek.', isUser: false),
+            Message(text: null, isUser: false, image: null, file: 'New Attachment.pdf'),
           );
           _messages = [..._deepseekMessages];
           notifyListeners();
+          scrollToBottom();
         });
       }
     }
@@ -197,6 +251,7 @@ class ChatViewModel extends ChangeNotifier {
       selectedModelVersion = deepseekSelectedModelVersion;
     }
     notifyListeners();
+    scrollToBottom();
   }
 
   @override

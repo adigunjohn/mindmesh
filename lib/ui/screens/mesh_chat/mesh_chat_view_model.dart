@@ -1,11 +1,18 @@
+import 'dart:developer';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mindmesh/app/locator.dart';
 import 'package:mindmesh/models/message.dart';
+import 'package:mindmesh/services/file_picker_service.dart';
 import 'package:mindmesh/services/navigation_service.dart';
 
 class MeshChatViewModel extends ChangeNotifier{
   MeshChatViewModel();
   final NavigationService _navigate = locator<NavigationService>();
+  final FilePickerService _filePickerService = locator<FilePickerService>();
 
   final ScrollController _geminiScrollController = ScrollController();
   final ScrollController _chatGPTScrollController = ScrollController();
@@ -22,6 +29,8 @@ class MeshChatViewModel extends ChangeNotifier{
   String claudeSelectedModelVersion = 'claude v-1 mini';
   String chatGPTSelectedModelVersion = 'openAI v-1 mini';
   String deepseekSelectedModelVersion = 'deepseek v-1 mini';
+  XFile? pickedImage;
+  List<PlatformFile>? pickedFile;
 
   final List<String> _geminiModelVersion =  [
     'gemini v-1 mini',
@@ -82,6 +91,37 @@ class MeshChatViewModel extends ChangeNotifier{
     showOptions =! showOptions;
     notifyListeners();
   }
+  void deleteFile(){
+    pickedFile = null;
+    pickedImage = null;
+    notifyListeners();
+  }
+
+  void pickImage(ImageSource source) async{
+    final image = await _filePickerService.pickImage(source: source);
+    if(image != null){
+      deleteFile();
+      pickedImage = image;
+      log(pickedImage!.path);
+      notifyListeners();
+    }
+    else{
+      log('Error: unable to pick image from $source');
+    }
+  }
+
+  void pickFile() async{
+    final file = await _filePickerService.pickFile();
+    if(file != null){
+      deleteFile();
+      pickedFile = file;
+      log('File Name: ${pickedFile!.first.name}, File Path: ${pickedFile!.first.path.toString()}');
+      notifyListeners();
+    }
+    else{
+      log('Error: unable to pick file');
+    }
+  }
 
   void updateGeminiSelectedModelVersion(String value){
     geminiSelectedModelVersion = value;
@@ -99,17 +139,29 @@ class MeshChatViewModel extends ChangeNotifier{
     chatGPTSelectedModelVersion = value;
     notifyListeners();
   }
+  void scrollToBottom(ScrollController scrollController) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0.0);
+      }
+    });
+  }
 
   void sendMessageToAll(){
-    final message = _textController.text.trim();
-    if(message.isNotEmpty){
-      final chatMessages = Message(text: message, isUser: true,);
+    final message = _textController.text.isNotEmpty ? _textController.text.trim() : null;
+    if(message != null || pickedImage != null || pickedFile != null){
+      final chatMessages = Message(text: message, isUser: true, image: pickedImage?.path, file: pickedFile?.first.name);
       _geminiMessages.add(chatMessages);
       _chatGPTMessages.add(chatMessages);
       _claudeMessages.add(chatMessages);
       _deepseekMessages.add(chatMessages);
       _textController.clear();
+      deleteFile();
       notifyListeners();
+      scrollToBottom(_geminiScrollController);
+      scrollToBottom(_chatGPTScrollController);
+      scrollToBottom(_claudeScrollController);
+      scrollToBottom(_deepseekScrollController);
 
       Future.delayed(Duration(seconds: 2), (){
         final reply1 = Message(text: 'Aye Aye John Doe, Gemini at your service! 😍👍', isUser: false,);
@@ -121,6 +173,11 @@ class MeshChatViewModel extends ChangeNotifier{
         _claudeMessages.add(reply3);
         _deepseekMessages.add(reply4);
         notifyListeners();
+
+        scrollToBottom(_geminiScrollController);
+        scrollToBottom(_chatGPTScrollController);
+        scrollToBottom(_claudeScrollController);
+        scrollToBottom(_deepseekScrollController);
       });
     }
   }

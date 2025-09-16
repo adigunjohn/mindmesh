@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:mindmesh/ui/common/styles.dart';
 import 'package:mindmesh/ui/common/ui_helpers.dart';
 
@@ -52,6 +53,6 @@ class WrapCon extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ).animate().fade(duration: Duration(milliseconds: 600),);
   }
 }

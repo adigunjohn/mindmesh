@@ -1,19 +1,24 @@
+import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mindmesh/ui/common/strings.dart';
 import 'package:mindmesh/ui/common/styles.dart';
 import 'package:mindmesh/ui/common/ui_helpers.dart';
 import 'package:mindmesh/ui/custom_widgets/wrap_con.dart';
 
-
 class MindmeshTextfield extends StatelessWidget {
-  const MindmeshTextfield({super.key,
-  this.controller,
+  const MindmeshTextfield({
+    super.key,
+    this.controller,
     this.visible = false,
     this.onTap,
     this.onDoubleTap,
     this.pickImageFromCamera,
     this.pickFiles,
     this.pickImageFromGallery,
+    this.onDeleteFile,
+    this.image,
+    this.file,
   });
 
   final TextEditingController? controller;
@@ -22,12 +27,14 @@ class MindmeshTextfield extends StatelessWidget {
   final void Function()? pickFiles;
   final void Function()? onTap;
   final void Function()? onDoubleTap;
+  final void Function()? onDeleteFile;
   final bool visible;
+  final String? image;
+  final String? file;
   @override
   Widget build(BuildContext context) {
-    return  Padding(
-      padding:
-      const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -37,25 +44,81 @@ class MindmeshTextfield extends StatelessWidget {
               runSpacing: 10,
               spacing: 8,
               children: [
-               WrapCon(
-                 text: AppStrings.pickImage,
-                 icon: Icons.image_outlined,
-                 onTap: pickImageFromGallery,
-               ),
                 WrapCon(
-                 text: AppStrings.takePicture,
-                 icon: Icons.camera_alt_outlined,
-                 onTap: pickImageFromCamera,
-               ),
+                  text: AppStrings.pickImage,
+                  icon: Icons.image_outlined,
+                  onTap: pickImageFromGallery,
+                ),
                 WrapCon(
-                 text: AppStrings.pickFile,
-                 icon: Icons.file_open_outlined,
-                 onTap: pickFiles,
-               ),
+                  text: AppStrings.takePicture,
+                  icon: Icons.camera_alt_outlined,
+                  onTap: pickImageFromCamera,
+                ),
+                WrapCon(
+                  text: AppStrings.pickFile,
+                  icon: Icons.file_open_outlined,
+                  onTap: pickFiles,
+                ),
               ],
             ),
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 35),
+          if (image != null || file != null) SizedBox(
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                    child: Container(
+                      padding: EdgeInsets.all(2),
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 3, color: kCGreenColor),
+                      ),
+                      child:
+                          image != null
+                              ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.file(
+                                  File(image.toString()),
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                              : Center(
+                                child: Text(
+                                  file.toString(),
+                                  maxLines: 3,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.displaySmall!.copyWith(
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium!.color,
+                                    fontSize: 10
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: -10, right: -10,
+                  child: IconButton(
+                    onPressed: onDeleteFile,
+                    icon: Icon(Icons.highlight_remove, color: kCGreenColor,),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 15),
           Container(
             decoration: BoxDecoration(
               color: kCGrey200Color,
@@ -71,12 +134,17 @@ class MindmeshTextfield extends StatelessWidget {
                       cursorColor: kCGreenColor,
                       minLines: 1,
                       maxLines: 4,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kCBlackColor),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium!.copyWith(color: kCBlackColor),
                       decoration: InputDecoration(
                         hintText: AppStrings.hintText,
                         hintStyle: Theme.of(context).textTheme.displaySmall,
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 8,
+                        ),
                       ),
                     ),
                   ),
@@ -85,11 +153,16 @@ class MindmeshTextfield extends StatelessWidget {
                     onDoubleTap: onDoubleTap,
                     child: Container(
                       padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: kCWhiteColor,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Icon(Icons.arrow_upward_rounded, size: IconSize.chatBubbleIconSize, color: kCBlackColor,)),
+                      decoration: BoxDecoration(
+                        color: kCWhiteColor,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Icon(
+                        Icons.arrow_upward_rounded,
+                        size: IconSize.chatBubbleIconSize,
+                        color: kCBlackColor,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -100,8 +173,6 @@ class MindmeshTextfield extends StatelessWidget {
     );
   }
 }
-
-
 
 // class SuTextField extends StatelessWidget {
 //   const SuTextField({super.key, this.hintText, this.suffixIcon, this.onSubmitted, this.prefixIcon, this.keyboardType, this.onChanged, this.onEditingComplete, required this.readOnly, this.controller, this.labelText});
