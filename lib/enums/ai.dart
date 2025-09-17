@@ -2,6 +2,6 @@
 enum AI {
   gemini,
   chatGPT,
-  claude,
+  qwen,
   deepseek,
 }

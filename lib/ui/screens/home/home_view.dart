@@ -147,14 +147,6 @@ class HomeView extends StatelessWidget {
                           children: [
                             HomeTiles(
                               onTap: () {
-                                model.navigate(ChatView(whichAI: AI.chatGPT));
-                              },
-                              title: AppStrings.chatGPTAI,
-                              subTitle: AppStrings.chatGPTSub,
-                              image: AppStrings.openAI,
-                            ),
-                            HomeTiles(
-                              onTap: () {
                                 model.navigate(ChatView(whichAI: AI.gemini));
                               },
                               title: AppStrings.geminiAI,
@@ -163,11 +155,11 @@ class HomeView extends StatelessWidget {
                             ),
                             HomeTiles(
                               onTap: () {
-                                model.navigate(ChatView(whichAI: AI.claude));
+                                model.navigate(ChatView(whichAI: AI.qwen));
                               },
-                              title: AppStrings.claudeAI,
-                              subTitle: AppStrings.claudeSub,
-                              image: AppStrings.claude,
+                              title: AppStrings.qwenAI,
+                              subTitle: AppStrings.qwenSub,
+                              image: AppStrings.qwen,
                             ),
                             HomeTiles(
                               onTap: () {
@@ -176,6 +168,14 @@ class HomeView extends StatelessWidget {
                               title: AppStrings.deepseekAI,
                               subTitle: AppStrings.deepseekSub,
                               image: AppStrings.deepseek,
+                            ),
+                            HomeTiles(
+                              onTap: () {
+                                model.navigate(ChatView(whichAI: AI.chatGPT));
+                              },
+                              title: AppStrings.chatGPTAI,
+                              subTitle: AppStrings.chatGPTSub,
+                              image: AppStrings.openAI,
                             ),
                           ],
                         ),

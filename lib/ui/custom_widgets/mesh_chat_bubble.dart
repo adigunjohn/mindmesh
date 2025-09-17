@@ -15,24 +15,22 @@ class MeshChatBubble extends StatelessWidget {
   final String aiImage;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Scrollbar(
-          thickness: 6,
-          radius: Radius.circular(25),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Scrollbar(
+        thickness: 6,
+        radius: Radius.circular(25),
+        controller: scrollController,
+        child: ListView.builder(
+          padding: EdgeInsets.only(bottom: 90, top: 15),
           controller: scrollController,
-          child: ListView.builder(
-            padding: EdgeInsets.only(bottom: 90, top: 15),
-            controller: scrollController,
-            reverse: true,
-            shrinkWrap: true,
-            itemCount: itemCount,
-            itemBuilder: (context, index) {
-              final message = messages[messages.length - 1 - index];
-              return ChatBubble(aiImage: aiImage, message: message.text, isUser: message.isUser, time: message.time, image: message.image, file: message.file,);
-            },
-          ),
+          reverse: true,
+          shrinkWrap: true,
+          itemCount: itemCount,
+          itemBuilder: (context, index) {
+            final message = messages[messages.length - 1 - index];
+            return ChatBubble(aiImage: aiImage, message: message.text, isUser: message.isUser, time: message.time, image: message.image, file: message.file,);
+          },
         ),
       ),
     );

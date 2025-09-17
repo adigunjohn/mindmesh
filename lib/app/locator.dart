@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mindmesh/app/theme/theme.dart';
 import 'package:mindmesh/services/ai_service.dart';
+import 'package:mindmesh/services/gemini_ai_service.dart';
 import 'package:mindmesh/services/file_picker_service.dart';
 import 'package:mindmesh/services/hive_service.dart';
 import 'package:mindmesh/services/http_service.dart';
@@ -16,5 +17,6 @@ void setupLocator(){
   locator.registerLazySingleton(() => HiveService());
   locator.registerLazySingleton(() => SnackBarService());
   locator.registerLazySingleton(() => FilePickerService());
-  locator.registerLazySingleton(() => AIService());
+  locator.registerLazySingleton(() => GeminiAIService());
+  locator.registerLazySingleton(() => OtherAIService());
 }

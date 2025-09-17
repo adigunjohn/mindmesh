@@ -17,7 +17,7 @@ class AppStrings{
   //Images
   static const String dp = 'assets/images/jpgs/avi.jpg';
   static const String dp1 = 'assets/images/jpgs/avi1.jpg';
-  static const String claude = 'assets/images/svgs/claude.svg';
+  static const String qwen = 'assets/images/svgs/qwen.svg';
   static const String openAI = 'assets/images/svgs/openai.svg';
   static const String gemini = 'assets/images/svgs/gemini.svg';
   static const String deepseek = 'assets/images/svgs/deepseek.svg';
@@ -38,7 +38,7 @@ class AppStrings{
 
   //HomeView
   static const String hi = 'Hi 🖐️,';
-  static const String greetings = 'How do you want to explore today?';
+  static const String greetings = 'What do you want to explore today?';
   static const String engageMultipleAIs = 'Engage in conversation with multiple AIs';
   static const String converseWithGeminiAI = 'Chat with Gemini AI';
   static const String converseWithChatGPTAI = 'Talk to ChatGPT AI';
@@ -47,8 +47,8 @@ class AppStrings{
   static const String chatGPTSub = 'Developed by OpenAI';
   static const String geminiAI = 'Gemini';
   static const String geminiSub = 'Developed by Google LLC';
-  static const String claudeAI = 'Claude';
-  static const String claudeSub = 'Developed by Anthropic';
+  static const String qwenAI = 'Qwen';
+  static const String qwenSub = 'Developed by Alibaba';
   static const String deepseekAI = 'DeepSeek';
   static const String deepseekSub = 'Developed by DeepSeek';
 
@@ -78,4 +78,17 @@ class AppStrings{
   static const String pickImage = 'Pick Image';
   static const String takePicture  = 'Take Picture';
   static const String pickFile = 'Pick Files';
+
+  static const String deepseekIntro = 'Hi! I\'m DeepSeek.\nHow can I help you?';
+  static const String qwenIntro = 'Hi! I\'m Qwen.\nHow can I help you?';
+  static const String chatGPTIntro = 'Hi! I\'m ChatGPT.\nHow can I help you?';
+  static const String geminiIntro = 'Hi! I\'m Gemini.\nHow can I help you?';
+
+  //API
+  static const String openAIUrl = 'https://api.openai.com/v1/chat/completions';
+  static const String openAIImageUrl = 'https://api.openai.com/v1/images/generations';
+  static const String openRouterUrl = 'https://openrouter.ai/api/v1/chat/completions';
+  static const String authorization = 'Authorization';
+  static const String contentType = 'Content-Type';
+  static const String applicationJson = 'application/json';
 }

@@ -6,6 +6,7 @@ class Message{
   final bool isUser;
   final String? image;
   final String? file;
+  final String? filePath;
 
-  Message({this.text, required this.isUser,this.image, this.file});
+  Message({this.text, required this.isUser,this.image, this.file, this.filePath});
 }

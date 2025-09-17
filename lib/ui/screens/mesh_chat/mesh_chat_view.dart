@@ -57,8 +57,8 @@ class MeshChatView extends StatelessWidget {
                     labelPadding: EdgeInsets.symmetric(horizontal: 8,vertical: 2),
                     tabs: [
                       Text(AppStrings.geminiAI, style: Theme.of(context).textTheme.displayMedium,),
+                      Text(AppStrings.qwenAI, style: Theme.of(context).textTheme.displayMedium,),
                       Text(AppStrings.chatGPTAI, style: Theme.of(context).textTheme.displayMedium,),
-                      Text(AppStrings.claudeAI, style: Theme.of(context).textTheme.displayMedium,),
                       Text(AppStrings.deepseekAI, style: Theme.of(context).textTheme.displayMedium,),
                     ],
                   ),
@@ -76,6 +76,14 @@ class MeshChatView extends StatelessWidget {
                         aiImage: AppStrings.gemini,
                       ),
 
+                      //qwen tab
+                      MeshChatBubble(
+                        scrollController: model.qwenScrollController,
+                        itemCount: model.qwenMessages.length,
+                        messages: model.qwenMessages,
+                        aiImage: AppStrings.qwen,
+                        ),
+
                       //chatGPT tab
                       MeshChatBubble(
                         scrollController: model.chatGPTScrollController,
@@ -83,14 +91,6 @@ class MeshChatView extends StatelessWidget {
                         messages: model.chatGPTMessages,
                         aiImage: AppStrings.openAI,
                       ),
-
-                      //claude tab
-                      MeshChatBubble(
-                        scrollController: model.claudeScrollController,
-                        itemCount: model.claudeMessages.length,
-                        messages: model.claudeMessages,
-                        aiImage: AppStrings.claude,
-                        ),
 
                       //deepseek tab
                       MeshChatBubble(
