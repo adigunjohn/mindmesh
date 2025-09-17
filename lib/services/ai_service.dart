@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:mindmesh/enums/ai.dart';
 import 'package:mindmesh/models/message.dart';
 import 'package:mindmesh/services/exception_handler.dart';
 import 'package:mindmesh/ui/common/strings.dart';
@@ -174,96 +173,4 @@ class OtherAIService {
     return history;
   }
 
-  Future<List<Map<String, String>>> convertMessagesToContentHistoryDeepseek(
-      List<Message> messages,
-      AI? ai,
-      ) async {
-    log('Fetching history started');
-    List<Map<String, String>> history = [];
-    for (var message in messages) {
-      if (message.text != 'Hi! I\'m Deepseek.\nHow can I help you?') {
-        if (message.text != null ||
-            message.filePath != null ||
-            message.image != null) {
-          if (message.isUser) {
-            history.add({"role": "user", "content": message.text!});
-          } else {
-            history.add({"role": "assistant", "content": message.text!});
-          }
-        } else {
-          log(
-            'Skipped this $message because it has no text, image or file: ${message.toString()}',
-          );
-        }
-      } else {
-        log('Skipped the pre-added message: ${message.text}');
-      }
-    }
-    log(
-      'Fetching history completed: ${history.length} of ${messages.length} messages',
-    );
-    return history;
-  }
-
-  Future<List<Map<String, String>>> convertMessagesToContentHistoryQwen(
-      List<Message> messages,
-      AI? ai,
-      ) async {
-    log('Fetching history started');
-    List<Map<String, String>> history = [];
-    for (var message in messages) {
-      if (message.text != 'Hi! I\'m Qwen.\nHow can I help you?') {
-        if (message.text != null ||
-            message.filePath != null ||
-            message.image != null) {
-          if (message.isUser) {
-            history.add({"role": "user", "content": message.text!});
-          } else {
-            history.add({"role": "assistant", "content": message.text!});
-          }
-        } else {
-          log(
-            'Skipped this $message because it has no text, image or file: ${message.toString()}',
-          );
-        }
-      } else {
-        log('Skipped the pre-added message: ${message.text}');
-      }
-    }
-    log(
-      'Fetching history completed: ${history.length} of ${messages.length} messages',
-    );
-    return history;
-  }
-
-  Future<List<Map<String, String>>> convertMessagesToContentHistoryChatGPT(
-      List<Message> messages,
-      AI? ai,
-      ) async {
-    log('Fetching history started');
-    List<Map<String, String>> history = [];
-    for (var message in messages) {
-      if (message.text != 'Hi! I\'m ChatGPT.\nHow can I help you?') {
-        if (message.text != null ||
-            message.filePath != null ||
-            message.image != null) {
-          if (message.isUser) {
-            history.add({"role": "user", "content": message.text!});
-          } else {
-            history.add({"role": "assistant", "content": message.text!});
-          }
-        } else {
-          log(
-            'Skipped this $message because it has no text, image or file: ${message.toString()}',
-          );
-        }
-      } else {
-        log('Skipped the pre-added message: ${message.text}');
-      }
-    }
-    log(
-      'Fetching history completed: ${history.length} of ${messages.length} messages',
-    );
-    return history;
-  }
 }

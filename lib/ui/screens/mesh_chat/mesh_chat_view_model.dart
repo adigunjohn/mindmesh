@@ -1,13 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mindmesh/app/locator.dart';
-import 'package:mindmesh/enums/ai.dart';
 import 'package:mindmesh/models/message.dart';
 import 'package:mindmesh/services/ai_service.dart';
 import 'package:mindmesh/services/file_picker_service.dart';
