@@ -19,8 +19,9 @@ class MeshChatViewModel extends ChangeNotifier{
   final FilePickerService _filePickerService = locator<FilePickerService>();
   final GeminiAIService _geminiAIService = locator<GeminiAIService>();
   final OtherAIService _otherAIService = locator<OtherAIService>();
-  final String? _chatGPTApiKey = dotenv.env['OPENAI_API_KEY'];
-  final String? _openRouterApiKey = dotenv.env['OPEN_ROUTER_API_KEY'];
+  final String? _openRouterApiKey1A = dotenv.env['OPEN_ROUTER_API_KEY_1A'];   //chatgpt
+  final String? _openRouterApiKey2A = dotenv.env['OPEN_ROUTER_API_KEY_2A'];   //qwen
+  final String? _openRouterApiKey3A = dotenv.env['OPEN_ROUTER_API_KEY_3A'];   //deepseek
 
   final ScrollController _geminiScrollController = ScrollController();
   final ScrollController _chatGPTScrollController = ScrollController();
@@ -67,9 +68,9 @@ class MeshChatViewModel extends ChangeNotifier{
   List<Message> get deepseekMessages => _deepseekMessages;
 
   String geminiSelectedModelVersion = 'gemini-2.5-flash';
-  String qwenSelectedModelVersion = 'qwen/qwen-plus-2025-07-28';
-  String chatGPTSelectedModelVersion = 'gpt-5';
-  String deepseekSelectedModelVersion = 'deepseek/deepseek-chat-v3-0324:free';
+  String qwenSelectedModelVersion =  'qwen/qwen3-30b-a3b:free';
+  String chatGPTSelectedModelVersion = 'openai/gpt-oss-20b:free';
+  String deepseekSelectedModelVersion = 'deepseek/deepseek-chat-v3.1:free';
 
   void pop() {
     _navigate.pop();
@@ -155,10 +156,10 @@ class MeshChatViewModel extends ChangeNotifier{
     String? replyText;
     try{
       if(text != null && (pickedImage == null && pickedFile == null)){
-        replyText = await _otherAIService.sendChatMessage(history: history, model: qwenSelectedModelVersion, apiKey: _openRouterApiKey, baseUrl: AppStrings.openRouterUrl);
+        replyText = await _otherAIService.sendChatMessage(history: history, model: qwenSelectedModelVersion, apiKey: _openRouterApiKey2A, baseUrl: AppStrings.openRouterUrl);
       }
       else if(pickedImage != null || pickedFile != null){
-        replyText = await _otherAIService.sendMessageWithFile(history: history, file: File(pickedImage?.path ?? pickedFile!.first.path!), model: qwenSelectedModelVersion, baseUrl: AppStrings.openRouterUrl, apiKey: _openRouterApiKey);
+        replyText = await _otherAIService.sendMessageWithFile(history: history, file: File(pickedImage?.path ?? pickedFile!.first.path!), model: qwenSelectedModelVersion, baseUrl: AppStrings.openRouterUrl, apiKey: _openRouterApiKey2A);
       }
       _qwenMessages.removeLast();
       notifyListeners();
@@ -176,10 +177,10 @@ class MeshChatViewModel extends ChangeNotifier{
     String? replyText;
     try{
       if(text != null && (pickedImage == null && pickedFile == null)){
-        replyText = await _otherAIService.sendChatMessage(history: history, model: deepseekSelectedModelVersion, apiKey: _openRouterApiKey, baseUrl: AppStrings.openRouterUrl);
+        replyText = await _otherAIService.sendChatMessage(history: history, model: deepseekSelectedModelVersion, apiKey: _openRouterApiKey3A, baseUrl: AppStrings.openRouterUrl);
       }
       else if(pickedImage != null || pickedFile != null){
-        replyText = await _otherAIService.sendMessageWithFile(history: history, file: File(pickedImage?.path ?? pickedFile!.first.path!), model: deepseekSelectedModelVersion, baseUrl: AppStrings.openRouterUrl, apiKey: _openRouterApiKey);
+        replyText = await _otherAIService.sendMessageWithFile(history: history, file: File(pickedImage?.path ?? pickedFile!.first.path!), model: deepseekSelectedModelVersion, baseUrl: AppStrings.openRouterUrl, apiKey: _openRouterApiKey3A);
       }
       _deepseekMessages.removeLast();
       notifyListeners();
@@ -197,11 +198,11 @@ class MeshChatViewModel extends ChangeNotifier{
     String? replyText;
     try{
       if(text != null && (pickedImage == null && pickedFile == null)){
-        replyText = await _otherAIService.sendChatMessage(history: history, model: chatGPTSelectedModelVersion, apiKey: _chatGPTApiKey, baseUrl: AppStrings.openAIUrl);
+        replyText = await _otherAIService.sendChatMessage(history: history, model: chatGPTSelectedModelVersion, apiKey: _openRouterApiKey1A, baseUrl: AppStrings.openRouterUrl);
         //  replyText = await _otherAIService.generateImageWithOpenAI(prompt: text, apiKey: _chatGPTApiKey);
       }
       else if(pickedImage != null || pickedFile != null){
-        replyText = await _otherAIService.sendMessageWithFile(history: history, file: File(pickedImage?.path ?? pickedFile!.first.path!), model: chatGPTSelectedModelVersion, baseUrl: AppStrings.openAIUrl, apiKey: _chatGPTApiKey);
+        replyText = await _otherAIService.sendMessageWithFile(history: history, file: File(pickedImage?.path ?? pickedFile!.first.path!), model: chatGPTSelectedModelVersion, baseUrl: AppStrings.openRouterUrl, apiKey: _openRouterApiKey1A);
       }
       _chatGPTMessages.removeLast();
       notifyListeners();
