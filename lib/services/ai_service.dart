@@ -19,8 +19,7 @@ class OtherAIService {
     }
     final url = Uri.parse(baseUrl);
     try {
-      final response = await http
-          .post(
+      final response = await http.post(
             url,
             headers: {
               AppStrings.contentType: AppStrings.applicationJson,
@@ -66,8 +65,7 @@ class OtherAIService {
     }
     final url = Uri.parse(AppStrings.openAIImageUrl);
     try {
-      final response = await http
-          .post(
+      final response = await http.post(
             url,
             headers: {
               AppStrings.contentType: AppStrings.applicationJson,

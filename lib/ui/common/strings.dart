@@ -1,8 +1,18 @@
 class AppStrings{
   static const String poppins = 'Poppins'; //font family
   static const String mindMesh = 'MindMesh'; //app name
+
+  //Hive
   static const String theme = 'Theme'; //hive
   static const String themeKey = 'ThemeKey'; //hive
+  static const String geminiListKey = 'GeminiListKey'; //hive
+  static const String geminiListKey1 = 'GeminiListKey1'; //hive
+  static const String chatGPTListKey = 'ChatGPTListKey'; //hive
+  static const String chatGPTListKey1 = 'ChatGPTListKey1'; //hive
+  static const String qwenListKey = 'QwenListKey'; //hive
+  static const String qwenListKey1 = 'QwenListKey1'; //hive
+  static const String deepseekListKey = 'DeepseekListKey'; //hive
+  static const String deepseekListKey1 = 'DeepseekListKey1'; //hive
 
   //Views
   static const String homeId = 'HomeView';
@@ -40,9 +50,9 @@ class AppStrings{
   static const String hi = 'Hi 🖐️,';
   static const String greetings = 'What do you want to explore today?';
   static const String engageMultipleAIs = 'Engage in conversation with multiple AIs';
-  static const String converseWithGeminiAI = 'Chat with Gemini AI';
-  static const String converseWithChatGPTAI = 'Talk to ChatGPT AI';
-  static const String featuredAI = 'Featured LLM AIs';
+  static const String converseWithGeminiAI = 'Chat with Gemini';
+  static const String converseWithChatGPTAI = 'Talk to ChatGPT';
+  static const String featuredAI = 'Featured AI Models';
   static const String chatGPTAI = 'ChatGPT';
   static const String chatGPTSub = 'Developed by OpenAI';
   static const String geminiAI = 'Gemini';
@@ -91,4 +101,5 @@ class AppStrings{
   static const String authorization = 'Authorization';
   static const String contentType = 'Content-Type';
   static const String applicationJson = 'application/json';
+
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mindmesh/app/locator.dart';
 import 'package:mindmesh/enums/app_theme.dart';
@@ -8,6 +10,7 @@ import 'package:mindmesh/ui/common/strings.dart';
 class SettingsViewModel extends ChangeNotifier {
   SettingsViewModel() {
     _initialize();
+    log('settings view model initialized');
   }
   final HiveService _hiveService = locator<HiveService>();
   final NavigationService _navigate = locator<NavigationService>();

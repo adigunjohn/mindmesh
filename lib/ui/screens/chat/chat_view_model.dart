@@ -10,14 +10,34 @@ import 'package:mindmesh/models/message.dart';
 import 'package:mindmesh/services/ai_service.dart';
 import 'package:mindmesh/services/gemini_ai_service.dart';
 import 'package:mindmesh/services/file_picker_service.dart';
+import 'package:mindmesh/services/hive_service.dart';
 import 'package:mindmesh/services/navigation_service.dart';
 import 'package:mindmesh/ui/common/strings.dart';
 import '../../../app/locator.dart';
 
 class ChatViewModel extends ChangeNotifier {
-  ChatViewModel();
+  ChatViewModel(){
+    log('chat view model initialized');
+    _geminiMessages = _hiveService.getMessageList(HiveService.geminiBox) ?? [Message(
+          text: AppStrings.geminiIntro,
+          isUser: false,
+        )];
+    _chatGPTMessages = _hiveService.getMessageList(HiveService.chatGPTBox) ?? [Message(
+      text: AppStrings.chatGPTIntro,
+      isUser: false,
+    )];
+    _qwenMessages = _hiveService.getMessageList(HiveService.qwenBox) ?? [Message(
+      text: AppStrings.qwenIntro,
+      isUser: false,
+    )];
+    _deepseekMessages = _hiveService.getMessageList(HiveService.deepseekBox) ?? [Message(
+      text: AppStrings.deepseekIntro,
+      isUser: false,
+    )];
+  }
   final FilePickerService _filePickerService = locator<FilePickerService>();
   final NavigationService _navigate = locator<NavigationService>();
+  final HiveService _hiveService = locator<HiveService>();
   final GeminiAIService _geminiAIService = locator<GeminiAIService>();
   final OtherAIService _otherAIService = locator<OtherAIService>();
   // final String? _chatGPTApiKey = dotenv.env['OPENAI_API_KEY'];
@@ -74,30 +94,10 @@ class ChatViewModel extends ChangeNotifier {
   List<Message> _messages = [];
   List<Message> get messages => _messages;
 
-  final List<Message> _geminiMessages = [
-    Message(
-      text: AppStrings.geminiIntro,
-      isUser: false,
-    ),
-  ];
-  final List<Message> _chatGPTMessages = [
-    Message(
-      text: AppStrings.chatGPTIntro,
-      isUser: false,
-    ),
-  ];
-  final List<Message> _qwenMessages = [
-    Message(
-      text: AppStrings.qwenIntro,
-      isUser: false,
-    ),
-  ];
-  final List<Message> _deepseekMessages = [
-    Message(
-      text: AppStrings.deepseekIntro,
-      isUser: false,
-    ),
-  ];
+  List<Message> _geminiMessages = [];
+  List<Message> _chatGPTMessages = [];
+  List<Message> _qwenMessages = [];
+  List<Message> _deepseekMessages = [];
 
   void pop() {
     _navigate.pop();
@@ -202,6 +202,7 @@ class ChatViewModel extends ChangeNotifier {
             Message(text: replyText, isUser: false, image: null, file: null),
           );
           _messages = [..._geminiMessages];
+          _hiveService.updateMessageList(messages: _geminiMessages,box: HiveService.geminiBox);
           notifyListeners();
           scrollToBottom();
         }catch(e){
@@ -235,6 +236,7 @@ class ChatViewModel extends ChangeNotifier {
             Message(image: null,isUser: false, file: null, text: replyText),
           );
           _messages = [..._qwenMessages];
+          _hiveService.updateMessageList(messages: _qwenMessages, box: HiveService.qwenBox);
           notifyListeners();
           scrollToBottom();
         }catch(e){
@@ -270,6 +272,7 @@ class ChatViewModel extends ChangeNotifier {
           Message(image: null,isUser: false, file: null, text: replyText),
         );
         _messages = [..._chatGPTMessages];
+          _hiveService.updateMessageList(messages: _chatGPTMessages, box: HiveService.chatGPTBox);
         notifyListeners();
         scrollToBottom();
         }catch(e){
@@ -302,6 +305,7 @@ class ChatViewModel extends ChangeNotifier {
             Message(image: null,isUser: false, file: null, text: replyText),
           );
           _messages = [..._deepseekMessages];
+          _hiveService.updateMessageList(messages: _deepseekMessages, box: HiveService.deepseekBox);
           notifyListeners();
           scrollToBottom();
         }catch(e){
